@@ -1,7 +1,7 @@
 name: Deploy Theme to Production
 
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:  # 👈 manual trigger from GitHub UI
 
 jobs:
   deploy:
@@ -11,9 +11,9 @@ jobs:
       - name: Checkout dev branch
         uses: actions/checkout@v4
         with:
-          ref: dev  # 👈 we're building from the dev branch!
+          ref: dev
 
-      - name: Set up Node.js
+      - name: Set up Node.js (if needed)
         uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -21,15 +21,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Ensure dist folder exists
+        run: mkdir -p dist
+
       - name: Run build script
-        run: npm run bundle  # build should output theme.zip
+        run: npm run bundle  # assumes it creates a theme.zip
 
       - name: Unzip built theme
         run: |
           mkdir theme
-          unzip ./dist/theme.zip -d theme  # adjust this path
+          unzip dist/theme.zip -d theme  # adjust path to zip location
 
-      - name: Push to production branch
+      - name: Deploy to production branch
         run: |
           cd theme
           git init
