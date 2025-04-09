@@ -36,8 +36,8 @@ jobs:
         run: |
           cd theme
           git init
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "Simon"
+          git config user.email "simon@smlwebdevelopment.co.uk"
           git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git checkout -b production
           git add .
