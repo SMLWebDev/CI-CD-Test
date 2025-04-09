@@ -27,7 +27,7 @@ jobs:
       - name: Unzip built theme
         run: |
           mkdir theme
-          unzip path/to/theme.zip -d theme  # adjust this path
+          unzip https://github.com/SMLWebDev/CI-CD-Test/tree/dev/theme.zip -d theme  # adjust this path
 
       - name: Push to production branch
         run: |
