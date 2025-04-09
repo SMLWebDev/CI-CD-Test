@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Run build script
-        run: npm run build  # build should output theme.zip
+        run: npm run bundle  # build should output theme.zip
 
       - name: Unzip built theme
         run: |
