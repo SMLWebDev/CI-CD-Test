@@ -1,0 +1,45 @@
+name: Deploy Theme to Production
+
+on:
+  workflow_dispatch:  # 👈 manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Set up Node.js (if needed)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Ensure dist folder exists
+        run: mkdir -p dist
+
+      - name: Run build script
+        run: npm run bundle  # assumes it creates a theme.zip
+
+      - name: Unzip built theme
+        run: |
+          mkdir theme
+          unzip dist/theme.zip -d theme  # adjust path to zip location
+
+      - name: Deploy to production branch
+        run: |
+          cd theme
+          git init
+          git config user.name "Simon"
+          git config user.email "simon@smlwebdevelopment.co.uk"
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git checkout -b production
+          git add .
+          git commit -m "Manual deploy from dev branch"
+          git push -f origin production
